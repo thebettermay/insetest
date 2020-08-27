@@ -3,11 +3,11 @@ export default class Gender {
     if (gender === "male") {
       const template = `<th class="gender">
       <img class="image"
-      src="<%=require('./src/images/male-solid.svg').default%>" </th>`;
+      src='./src/images/male-solid.svg' </th>`;
       return template;
     } else {
       const template = `<th class="gender">
-      <img class="image" "<%=require('./src/images/female-solid.svg').default%>"
+      <img class="image" src='./src/images/female-solid.svg'"
       </th>`;
       return template;
     }
