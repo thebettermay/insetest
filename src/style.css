@@ -1,0 +1,83 @@
+.root {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Helvetica";
+  font-weight: light;
+  color: #404040;
+}
+
+.table {
+  width: 100%;
+}
+
+.table tr {
+  height: 50px;
+}
+
+th {
+  border: 0.2px solid white;
+  background-color: #9c9c9c;
+  border-radius: 5px;
+}
+
+.name {
+  font-weight: bold;
+}
+.image {
+  width: 20px;
+  height: 30px;
+  color: #404040;
+}
+
+.button {
+  background-color: #e0cb79;
+  margin-top: 50px;
+  width: 100px;
+  border-radius: 5px;
+  border: 0.2px solid #404040;
+  background-color: #9c9c9c;
+  font-family: "Helvetica";
+  font-weight: light;
+}
+
+.pic-image {
+  margin-top: 5px;
+  border-radius: 100%;
+  border: 0.2px solid grey;
+  width: 38px;
+}
+.email {
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: inline;
+}
+
+.number.active {
+  color: blue;
+}
+
+.counter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.number {
+  font-family: "Helvetica";
+  color: #404040;
+}
+
+.disabled {
+  display: none;
+}
+
+.email {
+}

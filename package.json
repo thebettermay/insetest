@@ -1,8 +1,8 @@
 {
-  "name": "diploma",
+  "name": "insesoco",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production rimraf dist && webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --watch",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thebettermay/diploma.git"
+    "url": "git+https://github.com/thebettermay/insetest.git"
   },
   "author": "Evgeniy Orekhov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thebettermay/diploma/issues"
+    "url": "https://github.com/thebettermay/insetest/issues"
   },
-  "homepage": "https://github.com/thebettermay/diploma#readme",
+  "homepage": "https://github.com/thebettermay/insetest#readme",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
