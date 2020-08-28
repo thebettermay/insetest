@@ -8,7 +8,12 @@ import {
   COUNTERCONTAINER,
   ALLBUTTONS,
   CLEARBUTTON,
+  PRELOADER,
 } from "./js/constants/constants";
+
+import { img } from "./images/envelope-solid.svg";
+import { img1 } from "./images/female-solid.svg";
+import { img3 } from "./images/male-solid.svg";
 
 import RandomUserApi from "./js/modules/randomUserApi";
 import DataStorage from "./js/modules/dataStorage";
@@ -26,12 +31,16 @@ import Controller from "./js/components/Controller";
 import RenderOnLoad from "./js/components/RenderOnLoad";
 
 import getDate from "./js/utils/getDate";
-import sendEmail from "./js/utils/sendEmail";
+import checkTableNodes from "./js/utils/checkTableNodes";
+import storeAndGetTheData from "./js/utils/storeAndGetTheData";
+import getTheData from "./js/utils/getTheData";
+import getTheActivePageNumber from "./js/utils/getTheActivePageNumber";
+import checkCounterNodes from "./js/utils/checkCounterNodes";
 
-const RANDOMUSERAPI = new RandomUserApi(URL, ALLBUTTONS);
+const RANDOMUSERAPI = new RandomUserApi(URL);
 const GENDER = new Gender();
 const NAME = new Name();
-const EMAIL = new Email(sendEmail);
+const EMAIL = new Email();
 const DATE = new Date();
 const PIC = new Pic();
 const PHONE = new Phone();
@@ -48,7 +57,7 @@ const TABLEROW = new TableRow(
   TABLE,
   getDate
 );
-const DATASTORAGE = new DataStorage(RANDOMUSERAPI, ALLBUTTONS); //TABLEROW, DELETEROW);
+const DATASTORAGE = new DataStorage(RANDOMUSERAPI, ADDBUTTON); //TABLEROW, DELETEROW);
 const RENDERONLOAD = new RenderOnLoad(
   GENDER,
   NAME,
@@ -70,26 +79,15 @@ const CONTROLLER = new Controller(
   TABLE,
   COUNTERCONTAINER,
   ALLBUTTONS,
-  CLEARBUTTON
+  CLEARBUTTON,
+  DELETEBUTTON,
+  ADDBUTTON,
+  PRELOADER,
+  checkTableNodes,
+  storeAndGetTheData,
+  getTheData,
+  getTheActivePageNumber,
+  checkCounterNodes
 );
 
-COUNTERCONTAINER.addEventListener("click", () => {
-  CONTROLLER.activePageButton(TABLE);
-  CONTROLLER.renderOnClick();
-});
-window.addEventListener("load", () => {
-  CONTROLLER.renderOnWindowLoad();
-});
-DELETEBUTTON.addEventListener("click", () => {
-  CONTROLLER.renderWhileDelete();
-});
-
-ADDBUTTON.addEventListener("click", () => {
-  CONTROLLER.renderRow();
-
-  // CONTROLLER.deleteButtonVisible();
-});
-
-CLEARBUTTON.addEventListener("click", () => {
-  CONTROLLER.clearAllRender();
-});
+CONTROLLER.eventListeners();

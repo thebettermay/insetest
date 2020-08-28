@@ -1,7 +1,6 @@
 export default class RandomUserApi {
-  constructor(url, allButtons) {
+  constructor(url) {
     this.url = url;
-    this.allButtons = allButtons;
   }
   getData() {
     return fetch("https://" + `${this.url}`)

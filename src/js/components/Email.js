@@ -1,11 +1,7 @@
 export default class Email {
-  constructor(func) {
-    this.func = func;
-  }
   content(email) {
-    console.log(this.func);
     const template = `<th onclick="location.href='mailto:${email}';" class="email">
-          <img class="image" src="<%=require('./src/images/envelope-solid.svg').default%>" </th>`;
+          <img class="image" src="./images/envelope-solid.svg" </th>`;
     return template;
   }
 }

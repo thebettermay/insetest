@@ -10,3 +10,4 @@ export const CLEARBUTTON = document.querySelector(
 export const TABLE = document.querySelector(".table");
 export const COUNTER = 10;
 export const COUNTERCONTAINER = document.querySelector(".counter-container");
+export const PRELOADER = document.querySelector(".preloader");

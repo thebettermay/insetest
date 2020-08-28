@@ -8,7 +8,15 @@ export default class Controller {
     table,
     counterContainer,
     allButtons,
-    clearButton
+    clearButton,
+    deleteButton,
+    addButton,
+    preloader,
+    checkTableNodes,
+    storeAndGetTheData,
+    getTheData,
+    getTheActivePageNumber,
+    checkCounterNodes
   ) {
     this.storeTheData = storeTheData;
     this.renderTable = renderTable;
@@ -19,38 +27,25 @@ export default class Controller {
     this.counterContainer = counterContainer;
     this.allButtons = allButtons;
     this.clearButton = clearButton;
+    this.deleteButton = deleteButton;
+    this.addButton = addButton;
+    this.preloader = preloader;
+    this.checkTableNodes = checkTableNodes;
+    this.storeAndGetTheData = storeAndGetTheData;
+    this.getTheData = getTheData;
+    this.getTheActivePageNumber = getTheActivePageNumber;
+    this.checkCounterNodes = checkCounterNodes;
   }
 
-  async storeAndGetTheData() {
-    await this.storeTheData.storeTheData();
-    let data = await JSON.parse(localStorage.getItem("result"));
-    return data;
+  renderPreloader() {
+    this.checkTableNodes().then((length) => {
+      if (length == 0 || !length) {
+        this.preloader.classList.remove("disabled");
+      } else {
+        this.preloader.classList.add("disabled");
+      }
+    });
   }
-  async getTheData() {
-    let data = await JSON.parse(localStorage.getItem("result"));
-    return data;
-  }
-
-  async getTheActivePageNumber() {
-    let currentPage = await JSON.parse(localStorage.getItem("number"));
-    if (currentPage <= 1) {
-      return 1;
-    } else {
-      return parseInt(currentPage);
-    }
-  }
-
-  async checkTableNodes() {
-    let data = await this.table.childNodes.length;
-
-    return data;
-  }
-  async checkCounterNodes() {
-    let data = await this.counterContainer.childNodes.length;
-
-    return data;
-  }
-
   clearButtonVisibility() {
     this.getTheActivePageNumber().then((page) => {
       this.checkTableNodes().then((length) => {
@@ -82,10 +77,10 @@ export default class Controller {
       if (this.counterContainer.children[i].classList.contains("active")) {
         this.counterContainer.children[i].classList.remove("active");
         event.target.classList.add("active");
-        localStorage.setItem("number", JSON.stringify(event.target.innerText));
+        localStorage.setItem("number", JSON.stringify(event.target.id));
       } else {
         event.target.classList.add("active");
-        localStorage.setItem("number", JSON.stringify(event.target.innerText));
+        localStorage.setItem("number", JSON.stringify(event.target.id));
       }
     }
   }
@@ -99,7 +94,7 @@ export default class Controller {
 
       this.counterContainer.querySelectorAll("*").forEach((n) => n.remove());
       for (let i = 1; i <= count; i++) {
-        const number = `<p class="number" id="${i}">${i}</p>`;
+        const number = `<p class="dot" id="${i}"></p>`;
         this.counterContainer.insertAdjacentHTML("beforeend", number);
       }
       this.checkCounterNodes().then((length) => {
@@ -108,6 +103,21 @@ export default class Controller {
         } else {
           this.counterContainer.children[0].classList.remove("disabled");
         }
+      });
+    });
+  }
+
+  deleteButtonDeactivation() {
+    this.checkTableNodes().then((number) => {
+      this.checkCounterNodes().then((counter) => {
+        this.getTheActivePageNumber().then((page) => {
+          if (number == 10 && parseInt(page) < counter) {
+            console.log(counter);
+            this.deleteButton.classList.add("disabled");
+          } else {
+            this.deleteButton.classList.remove("disabled");
+          }
+        });
       });
     });
   }
@@ -128,6 +138,8 @@ export default class Controller {
         this.clearButtonVisibility();
         this.getPageCountOnRender();
         this.firstPageListener();
+        this.deleteButtonDeactivation();
+        this.renderPreloader();
       });
     } else if (
       this.table.children.length >= 10 &&
@@ -144,14 +156,19 @@ export default class Controller {
     this.table.querySelectorAll("*").forEach((n) => n.remove());
     this.clearButtonVisibility();
     this.deleteButtonVisibility();
+    this.renderPreloader();
   }
 
   renderRow() {
+    this.addButton.setAttribute("disabled", true);
     this.storeAndGetTheData().then((data) => {
       if (this.table.children.length < 10) {
         this.renderTable.render(data);
+        this.renderPreloader();
         this.deleteButtonVisibility();
         this.clearButtonVisibility();
+
+        setTimeout(this.addButton.removeAttribute("disabled"), 3000);
       } else {
         this.getTheData().then((data) => {
           this.table.querySelectorAll("*").forEach((n) => n.remove());
@@ -162,6 +179,7 @@ export default class Controller {
           );
           localStorage.setItem("number", JSON.stringify(currentPage));
           this.renderOnLoad.render(finalData);
+          setTimeout(this.addButton.removeAttribute("disabled"), 3000);
           this.deleteButtonVisibility();
           this.clearButtonVisibility();
           this.counterContainer
@@ -169,6 +187,7 @@ export default class Controller {
             .forEach((n) => n.remove());
           this.getPageCountOnRender();
           this.firstPageListener();
+          this.renderPreloader();
         });
       }
     });
@@ -181,19 +200,26 @@ export default class Controller {
         let currentPage = number;
         if (currentPage == 1) {
           let finalData = data.slice([currentPage - 1], [this.counter]);
+
           this.renderOnLoad.render(finalData);
           this.activePageButton();
           this.deleteButtonVisibility();
           this.clearButtonVisibility();
+          this.deleteButtonDeactivation();
+          this.renderPreloader();
         } else if (currentPage !== 1) {
           let finalData = data.slice(
             [this.counter * (currentPage - 1)],
             [this.counter * (currentPage - 1) + this.counter]
           );
+          console.log(finalData);
+
           this.renderOnLoad.render(finalData);
           this.activePageButton();
           this.deleteButtonVisibility();
           this.clearButtonVisibility();
+          this.deleteButtonDeactivation();
+          this.renderPreloader();
         }
       });
     });
@@ -206,6 +232,7 @@ export default class Controller {
 
         this.deleteButtonVisibility();
         this.clearButtonVisibility();
+        this.renderPreloader();
         return;
       }
       this.getTheActivePageNumber().then((number) => {
@@ -218,6 +245,7 @@ export default class Controller {
           this.firstPageListener();
           this.deleteButtonVisibility();
           this.clearButtonVisibility();
+          this.renderPreloader();
         } else if (currentPage !== 1) {
           let finalData = data.slice(
             [this.counter * (currentPage - 1)],
@@ -229,8 +257,30 @@ export default class Controller {
           this.firstPageListener();
           this.deleteButtonVisibility();
           this.clearButtonVisibility();
+          this.renderPreloader();
         }
       });
+    });
+  }
+  eventListeners() {
+    this.addButton.addEventListener("click", () => {
+      event.preventDefault();
+      this.renderRow();
+    });
+    this.counterContainer.addEventListener("click", () => {
+      this.activePageButton(this.table);
+      this.renderOnClick();
+    });
+    window.addEventListener("load", () => {
+      this.renderOnWindowLoad();
+    });
+    this.deleteButton.addEventListener("click", () => {
+      event.preventDefault();
+      this.renderWhileDelete();
+    });
+    this.clearButton.addEventListener("click", () => {
+      event.preventDefault();
+      this.clearAllRender();
     });
   }
 }

@@ -7,10 +7,6 @@ export default class DataStorage {
     return this.api
       .getData()
       .then((res) => {
-        this.allButtons.disabled = true;
-        let allButtons = [];
-        allButtons.push(this.allButtons);
-        allButtons[0].forEach((el) => el.classList.add("disabled"));
         let storage = JSON.parse(localStorage.getItem("result")) || [];
         storage.push(
           JSON.stringify({
@@ -32,8 +28,6 @@ export default class DataStorage {
           })
         );
         localStorage.setItem(`result`, JSON.stringify(storage));
-        this.allButtons.disabled = false;
-        allButtons[0].forEach((el) => el.classList.remove("disabled"));
       })
       .catch(() => {
         throw new Error("ERROR");
